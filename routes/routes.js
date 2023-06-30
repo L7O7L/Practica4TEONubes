@@ -19,15 +19,31 @@ router.get('/login', checkNoAuthenticated ,(req, res) => {
 
     res.render('signIn');
 
-})
+});
 
 router.post('/login', checkNoAuthenticated, passport.authenticate("local", {
 
-    successRedirect: "/inicio",
-    failureRedirect: "/",
+    successRedirect: "/",
+    failureRedirect: "/login",
     failureFlash: true
 
-}))
+}));
+
+router.delete('/logout', (req, res) => {
+
+    req.logOut(req.user, err => {
+
+        if(err) {
+
+            return next(err);
+
+        }
+
+        res.redirect('/login')
+
+    })
+
+});
 
 //Register
 

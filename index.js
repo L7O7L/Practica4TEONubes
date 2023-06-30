@@ -4,11 +4,12 @@ import dotenv from 'dotenv'
 import users from './routes/routes.js'
 import { dirname } from 'path'; 
 import { fileURLToPath } from 'url'; 
-import { checkAuthenticated, checkNoAuthenticated, initializePassport } from './services/LoginService.js';
+import { checkAuthenticated, initializePassport } from './services/LoginService.js';
 import passport from 'passport';
 import flash from 'express-flash';
 import session from 'express-session';
 import { readAllUsers } from './services/UserService.js';
+import methodOverride from 'method-override';
 
 readAllUsers().then(result => {
 
@@ -30,9 +31,9 @@ readAllUsers().then(result => {
     
     )
     
+    return usuarios;
 
 })
-
 
 dotenv.config();
 
@@ -40,7 +41,7 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename); 
 
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({extended: false}));
 
 app.set('view engine', 'ejs');
 
@@ -60,17 +61,13 @@ app.use(session({
 
 app.use(passport.initialize());
 
-app.use(passport.session())
+app.use(passport.session());
+
+app.use(methodOverride("_method"));
 
 //--------------------------------------------------------------------------------------
 
-app.get('/', (req, res) => {
-
-    res.redirect('/login');
-
-})
-
-app.get('/inicio', checkAuthenticated, (req, res) => {
+app.get('/', checkAuthenticated, (req, res) => {
 
     res.sendFile(__dirname + '/templates/landing_page.html')
 

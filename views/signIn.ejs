@@ -107,6 +107,14 @@
                 <input type="password" class="form-control" id="floatingPassword" placeholder="Password" name="password">
                 <label for="floatingPassword">Password</label>
             </div>
+            <% if (messages.error) { %>
+
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <small><strong><%= messages.error %></strong></small>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+            <% } %>
             <div class="checkbox mb-3">
                 <label>
                     <input type="checkbox" value="remember-me"> Remember me
@@ -114,7 +122,8 @@
             </div>
             <button class="w-100 btn btn-lg btn-primary" type="submit">Sign In</button>
             <hr class="my-4">
-            <small class="text-body-secondary">Si no tienes una cuenta has click aqui <a href="/registrar">Registrarme</a></small>
+            <small class="text-body-secondary">Si no tienes una cuenta has click aqui <a href="/registrar">Registrarme</a></small><br>
+            <small class="text-body-secondary"><a href="#">¿Olvidaste tu contraseña?</a></small>
         </form>
     </div>
 

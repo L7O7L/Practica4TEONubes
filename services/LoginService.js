@@ -5,38 +5,46 @@ const LocalStrategy = passlocal.Strategy;
 
 function initializePassport(passport, getUserByEmail, getUserById){
 
+    console.log(getUserByEmail);
+
     //Funcion para poder autentificar usuarios
 
     const authenticateUsers = async (email, password, done) => {
 
+        console.log(email, password);
+
         //Obtener usuario por email 
 
-        const user = await getUserByEmail(email);
+        const user = getUserByEmail(email);
 
-        if (user != null) {
+        console.log(user);
 
-            try {
+        if (user == null) {
 
-                if (await bcrypt.compare(password, user.password)) {
-
-                    return done(null, user);
-
-                }else {
-
-                    return done(null, false, { message: "Contraseña incorrecta" });
-
-                }
-                
-            } catch (error) {
-
-                console.log(error);
-                return done(error);
-
-            }
+            console.log(user);
+            return done(null, false, { message: "Nombre de usuario " });
 
         }
 
-        return done(null, false, { message: "No se encontro al usuario" });
+        try {
+
+            if (await bcrypt.compare(password, user.password)) {
+
+                console.log(user, password, user.password);
+                return done(null, user);
+
+            }else {
+
+                return done(null, false, { message: "ontraseña no válidos" });
+
+            }
+            
+        } catch (error) {
+
+            console.log(error);
+            return done(error);
+
+        }        
 
     }
 
@@ -58,7 +66,7 @@ function checkAuthenticated(req, res, next){
 
     }
 
-    res.redirect("/");
+    res.redirect("/login");
 
 }
 
@@ -66,7 +74,7 @@ function checkNoAuthenticated(req, res, next){
 
     if (req.isAuthenticated()){
 
-        res.redirect("/")
+        res.redirect("/login")
 
     }
 
